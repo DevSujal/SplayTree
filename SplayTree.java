@@ -1,4 +1,4 @@
-import java.util.Scanner;
+import java.util.*;
 
 class SplayTree {
     // Node class representing a node in the splay tree
@@ -15,7 +15,7 @@ class SplayTree {
     private Node root;
 
     // Function to perform a right rotation
-    private Node rotateRight(Node x) {
+    private Node rotateZag(Node x) {
         Node y = x.left;
         x.left = y.right;
         y.right = x;
@@ -43,12 +43,12 @@ class SplayTree {
             // Key is not in the tree
             if (root.left == null) return root;
 
-            // Zig-Zig (Left Left)
+            // Zag-Zag (Left Left)
             if (key < root.left.key) {
                 root.left.left = splay(root.left.left, key, steps);
-                root = rotateRight(root);
+                root = rotateZag(root);
             }
-            // Zig-Zag (Left Right)
+            // Zag-Zig (Left Right)
             else if (key > root.left.key) {
                 root.left.right = splay(root.left.right, key, steps);
                 if (root.left.right != null) {
@@ -56,19 +56,19 @@ class SplayTree {
                 }
             }
 
-            return (root.left == null) ? root : rotateRight(root);
+            return (root.left == null) ? root : rotateZag(root);
         } else {
             // Key is not in the tree
             if (root.right == null) return root;
 
-            // Zag-Zig (Right Left)
+            // Zig-Zag (Right Left)
             if (key < root.right.key) {
                 root.right.left = splay(root.right.left, key, steps);
                 if (root.right.left != null) {
-                    root.right = rotateRight(root.right);
+                    root.right = rotateZag(root.right);
                 }
             }
-            // Zag-Zag (Right Right)
+            // Zig-Zig (Right Right)
             else if (key > root.right.key) {
                 root.right.right = splay(root.right.right, key, steps);
                 root = rotateLeft(root);
@@ -123,7 +123,7 @@ class SplayTree {
         } else {
             Node temp = root.right;
             root = root.left;
-            splay(root, key, new int[1]);
+            // splay(root, key, new int[1]);
             root.right = temp;
         }
     }
@@ -135,7 +135,7 @@ class SplayTree {
             return;
         }
 
-        java.util.Queue<Node> queue = new java.util.LinkedList<>();
+        Queue<Node> queue = new LinkedList<>();
         queue.add(root);
         while (!queue.isEmpty()) {
             Node temp = queue.poll();
